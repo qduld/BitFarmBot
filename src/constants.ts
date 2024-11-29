@@ -1,26 +1,26 @@
 import { code, fmt, link } from "@grammyjs/parse-mode";
 
 export enum Game {
-	WORD_HUNT,
+	BIT_FARM,
 }
 
 export const GAME_LIST = [
 	{
-		name: "Word Hunt Online",
-		shortName: "who",
+		name: "Bit Farm Online",
+		shortName: "BitFarm",
 	},
 ];
 
 export const GAME_URL: { [key in Game]: string } = {
-	[Game.WORD_HUNT]: process.env.WORD_HUNT_URL as string,
+	[Game.BIT_FARM]: process.env.BIT_FARM_URL as string,
 };
 
 export const PLAYER_MAX: { [key in Game]: number } = {
-	[Game.WORD_HUNT]: Number.MAX_VALUE,
+	[Game.BIT_FARM]: Number.MAX_VALUE,
 };
 
 export const TURN_MAX: { [key in Game]: number } = {
-	[Game.WORD_HUNT]: Number.MAX_VALUE,
+	[Game.BIT_FARM]: Number.MAX_VALUE,
 };
 
 export const GAME_START_BUTTON_TEXT = "Play now!";

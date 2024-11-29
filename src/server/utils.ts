@@ -7,7 +7,7 @@ import { GameSession, fastify, gameSessions } from "./server";
 import { differenceInDays } from "date-fns";
 import { SessionExpiredError } from "./errors";
 
-import who from "./word-hunt/main";
+import bitFarm from "./bit-farm/main";
 
 export function setGameScore(
 	gameSession: GameSession,
@@ -105,7 +105,7 @@ export async function handleJoinSession(
 ) {
 	if (!gameSessions[sessionId]) {
 		// TODO: Start a wordhunt game by default; will need a way to specify the game later
-		const sessionCreated = await createSession(Game.WORD_HUNT, chatInfo, sessionId);
+		const sessionCreated = await createSession(Game.BIT_FARM, chatInfo, sessionId);
 		if (!sessionCreated) {
 			fastify.log.warn(`handleJoinSession: session ${sessionId} not created`);
 			res.redirect("https://http.cat/images/503.jpg");
@@ -128,14 +128,14 @@ export async function handleJoinSession(
 	// determine where to redirect the browser
 	if (session.players[userId] && !session.players[userId].started) {
 		switch (session.game) {
-			case Game.WORD_HUNT:
-				res.redirect(`${GAME_URL[Game.WORD_HUNT]}?session=${sessionId}&user=${userId}`);
+			case Game.BIT_FARM:
+				res.redirect(`${GAME_URL[Game.BIT_FARM]}?session=${sessionId}&user=${userId}`);
 				break;
 		}
 	} else {
 		switch (session.game) {
-			case Game.WORD_HUNT:
-				res.redirect(`${GAME_URL[Game.WORD_HUNT]}?session=${sessionId}&user=${userId}&spectate=true`);
+			case Game.BIT_FARM:
+				res.redirect(`${GAME_URL[Game.BIT_FARM]}?session=${sessionId}&user=${userId}&spectate=true`);
 				break;
 		}
 		// TODO: implement spectator mode (doesn't matter for word hunt)
@@ -190,8 +190,8 @@ export async function createSession(game: Game, chatInfo: ChatInfo, sessionId: s
 		created: new Date(),
 	};
 	switch (game) {
-		case Game.WORD_HUNT:
-			gameSessions[sessionId].board = await who.getBoardWithSolutions();
+		case Game.BIT_FARM:
+			gameSessions[sessionId].board = await bitFarm.getBoardWithSolutions();
 			break;
 	}
 	return true;

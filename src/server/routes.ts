@@ -134,7 +134,7 @@ export default (fastify: FastifyInstance, opts: any, done: (err?: Error | undefi
 			// perform game-specific actions here
 			// this includes turn-increment logic
 			switch (gameSession.game) {
-				case Game.WORD_HUNT:
+				case Game.BIT_FARM:
 					player.words = body.words;
 					break;
 			}

@@ -4,11 +4,11 @@ import fastifyCors from "@fastify/cors";
 import disableCache from "fastify-disablecache";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
-import whoRoutes from "./word-hunt/routes";
+import bitFarmRoutes from "./bit-farm/routes";
 import mainRoutes from "./routes";
 import { Game } from "../constants";
 
-import who from "./word-hunt/main";
+import bitFarm from "./bit-farm/main";
 import startBotPolling, { bot } from "../bot";
 import { webhookCallback } from "grammy";
 
@@ -62,7 +62,7 @@ fastify.register(swaggerUI, {
 });
 
 fastify.register(mainRoutes);
-fastify.register(whoRoutes, { prefix: "/who" });
+fastify.register(bitFarmRoutes, { prefix: "/bitFarm" });
 
 if (process.env.USE_WEBHOOK === "True") {
 	fastify.post(
@@ -77,7 +77,7 @@ if (process.env.USE_WEBHOOK === "True") {
 				}
 			},
 		},
-		webhookCallback(bot, "fastify")
+		webhookCallback(bot, "fastify"),
 	);
 }
 
@@ -88,7 +88,7 @@ fastify.setErrorHandler((err, req, reply) => {
 });
 
 async function startServer() {
-	await who.init();
+	await bitFarm.init();
 
 	fastify.listen(
 		{
@@ -105,7 +105,7 @@ async function startServer() {
 				await bot.api.setWebhook(`${process.env.SERVER_URL}/${process.env.WEBHOOK_SECRET}`);
 				console.log("Bot webhook set");
 			}
-		}
+		},
 	);
 }
 
@@ -132,7 +132,7 @@ export type GameSession = {
 	};
 	winnerIds: string[]; // state used for score-keeping
 	done: boolean;
-    created: Date;
+	created: Date;
 };
 
 export const gameSessions: {

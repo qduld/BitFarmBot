@@ -21,7 +21,7 @@ bot.command(
 );
 
 bot.command("game", async (ctx) => {
-	await ctx.replyWithGame(process.env.WORD_HUNT_SHORTNAME as string, {
+	await ctx.replyWithGame(process.env.BIT_FARM_SHORTNAME as string, {
 		reply_markup: startingInlineKeyboard,
 	});
 });
