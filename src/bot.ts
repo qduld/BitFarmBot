@@ -48,7 +48,8 @@ bot.on("callback_query:game_short_name", async (ctx) => {
 			const messageId = ctx.callbackQuery.message.message_id;
 			const sessionId = getSessionId(messageId.toString(), chatId.toString());
 			throwIfSessionExpired(sessionId);
-			const url = `${process.env.BIT_FARM_URL}`;
+			// const url = `${process.env.BIT_FARM_URL}`;
+			let url = await orgGameUrl(ctx);
 			// const url = `${process.env.SERVER_URL}/join-game/${chatId}/${messageId}/${ctx.callbackQuery.from.id}/${ctx.callbackQuery.from.first_name}`;
 			await ctx.answerCallbackQuery({ url });
 		}
@@ -56,7 +57,8 @@ bot.on("callback_query:game_short_name", async (ctx) => {
 			const inlineId = ctx.callbackQuery.inline_message_id;
 			const sessionId = getSessionId(inlineId.toString());
 			throwIfSessionExpired(sessionId);
-			const url = `${process.env.BIT_FARM_URL}`;
+			// const url = `${process.env.BIT_FARM_URL}`;
+			let url = await orgGameUrl(ctx);
 			// const url = `${process.env.SERVER_URL}/join-game/${inlineId}/${ctx.callbackQuery.from.id}/${ctx.callbackQuery.from.first_name}`;
 			await ctx.answerCallbackQuery({ url });
 		} else {
@@ -82,6 +84,31 @@ bot.on("callback_query:game_short_name", async (ctx) => {
 		});
 	}
 });
+
+async function orgGameUrl(ctx: any) {
+	const user = ctx.callbackQuery.from;
+
+	let urlWithPhoto = "";
+
+	// 调用 getUserProfilePhotos 获取头像信息
+	const profilePhotos = await ctx.api.getUserProfilePhotos(user.id, { limit: 1 });
+
+	if (profilePhotos.total_count > 0 && profilePhotos.photos[0].length > 0) {
+		// 获取用户头像的文件 ID（最高清的版本）
+		const fileId = profilePhotos.photos[0][0].file_id;
+
+		// 通过 Telegram API 获取文件下载链接
+		const fileLink = await ctx.api.getFile(fileId);
+		const photoUrl = `https://api.telegram.org/file/bot${process.env.BOT_API_KEY}/${fileLink.file_path}`;
+
+		// 将头像 URL 添加到游戏链接或显示给用户
+		urlWithPhoto = `${process.env.BIT_FARM_URL}?id=${user.id}&username=${
+			user.username
+		}&photo_url=${encodeURIComponent(photoUrl)}`;
+	}
+
+	return urlWithPhoto;
+}
 
 // Use the default callback handler to just display its text data.
 // So far, it just displays the score of the player whose button was clicked.
