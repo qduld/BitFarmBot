@@ -13,8 +13,8 @@ export const bot = new Bot<ParseModeFlavor<Context>>(process.env.BOT_API_KEY!);
 
 bot.use(hydrateReply);
 
-const startingInlineKeyboard = new InlineKeyboard().game(GAME_START_BUTTON_TEXT);
-// const startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", `${process.env.BIT_FARM_URL}`);
+// const startingInlineKeyboard = new InlineKeyboard().game(GAME_START_BUTTON_TEXT);
+const startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", `${process.env.BIT_FARM_URL}`);
 
 bot.command(
 	"start",
@@ -22,15 +22,15 @@ bot.command(
 );
 
 bot.command("game", async (ctx) => {
-	await ctx.replyWithGame(process.env.BIT_FARM_SHORTNAME as string, {
-		reply_markup: startingInlineKeyboard,
-	});
+	// await ctx.replyWithGame(process.env.BIT_FARM_SHORTNAME as string, {
+	// 	reply_markup: startingInlineKeyboard,
+	// });
 	// await ctx.api.sendGame(ctx.chat.id, process.env.BIT_FARM_SHORTNAME as string, {
 	// 	reply_markup: startingInlineKeyboard,
 	// });
-	// ctx.reply("Click the button below to play the game:", {
-	// 	reply_markup: startingInlineKeyboard,
-	// });
+	ctx.reply("Click the button below to play the game:", {
+		reply_markup: startingInlineKeyboard,
+	});
 });
 
 bot.on("callback_query:game_short_name", async (ctx) => {
@@ -48,7 +48,8 @@ bot.on("callback_query:game_short_name", async (ctx) => {
 			const messageId = ctx.callbackQuery.message.message_id;
 			const sessionId = getSessionId(messageId.toString(), chatId.toString());
 			throwIfSessionExpired(sessionId);
-			let url = await orgGameUrl(ctx);
+			const url = `${process.env.BIT_FARM_URL}`;
+			// let url = await orgGameUrl(ctx);
 			// const url = `${process.env.SERVER_URL}/join-game/${chatId}/${messageId}/${ctx.callbackQuery.from.id}/${ctx.callbackQuery.from.first_name}`;
 			await ctx.answerCallbackQuery({ url });
 		}
@@ -56,7 +57,8 @@ bot.on("callback_query:game_short_name", async (ctx) => {
 			const inlineId = ctx.callbackQuery.inline_message_id;
 			const sessionId = getSessionId(inlineId.toString());
 			throwIfSessionExpired(sessionId);
-			let url = await orgGameUrl(ctx);
+			const url = `${process.env.BIT_FARM_URL}`;
+			// let url = await orgGameUrl(ctx);
 			// const url = `${process.env.SERVER_URL}/join-game/${inlineId}/${ctx.callbackQuery.from.id}/${ctx.callbackQuery.from.first_name}`;
 			await ctx.answerCallbackQuery({ url });
 		} else {
