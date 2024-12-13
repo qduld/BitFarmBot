@@ -13,8 +13,8 @@ export const bot = new Bot<ParseModeFlavor<Context>>(process.env.BOT_API_KEY!);
 
 bot.use(hydrateReply);
 
-const startingInlineKeyboard = new InlineKeyboard().game(GAME_START_BUTTON_TEXT);
-// const startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", `${process.env.BIT_FARM_URL}`);
+// const startingInlineKeyboard = new InlineKeyboard().game(GAME_START_BUTTON_TEXT);
+const startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", `${process.env.BIT_FARM_URL}`);
 
 bot.command(
 	"start",
@@ -22,15 +22,15 @@ bot.command(
 );
 
 bot.command("game", async (ctx) => {
-	await ctx.replyWithGame(process.env.BIT_FARM_SHORTNAME as string, {
-		reply_markup: startingInlineKeyboard,
-	});
+	// await ctx.replyWithGame(process.env.BIT_FARM_SHORTNAME as string, {
+	// 	reply_markup: startingInlineKeyboard,
+	// });
 	// await ctx.api.sendGame(ctx.chat.id, process.env.BIT_FARM_SHORTNAME as string, {
 	// 	reply_markup: startingInlineKeyboard,
 	// });
-	// ctx.reply("Click the button below to play the game:", {
-	// 	reply_markup: startingInlineKeyboard,
-	// });
+	ctx.reply("Click the button below to play the game:", {
+		reply_markup: startingInlineKeyboard,
+	});
 });
 
 bot.on("callback_query:game_short_name", async (ctx) => {
