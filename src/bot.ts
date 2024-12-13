@@ -48,8 +48,8 @@ bot.on("callback_query:game_short_name", async (ctx) => {
 			const messageId = ctx.callbackQuery.message.message_id;
 			const sessionId = getSessionId(messageId.toString(), chatId.toString());
 			throwIfSessionExpired(sessionId);
-			// const url = `${process.env.BIT_FARM_URL}`;
-			let url = await orgGameUrl(ctx);
+			const url = `${process.env.BIT_FARM_URL}`;
+			// let url = await orgGameUrl(ctx);
 			// const url = `${process.env.SERVER_URL}/join-game/${chatId}/${messageId}/${ctx.callbackQuery.from.id}/${ctx.callbackQuery.from.first_name}`;
 			await ctx.answerCallbackQuery({ url });
 		}
@@ -57,8 +57,8 @@ bot.on("callback_query:game_short_name", async (ctx) => {
 			const inlineId = ctx.callbackQuery.inline_message_id;
 			const sessionId = getSessionId(inlineId.toString());
 			throwIfSessionExpired(sessionId);
-			// const url = `${process.env.BIT_FARM_URL}`;
-			let url = await orgGameUrl(ctx);
+			const url = `${process.env.BIT_FARM_URL}`;
+			// let url = await orgGameUrl(ctx);
 			// const url = `${process.env.SERVER_URL}/join-game/${inlineId}/${ctx.callbackQuery.from.id}/${ctx.callbackQuery.from.first_name}`;
 			await ctx.answerCallbackQuery({ url });
 		} else {
