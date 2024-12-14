@@ -1,6 +1,6 @@
 import { Bot, Context, GrammyError, InlineKeyboard } from "grammy";
 import { GAME_LIST, GAME_START_BUTTON_TEXT, WELCOME_MESSAGE } from "./constants";
-import { getSessionId, throwIfSessionExpired } from "./server/utils";
+import { getSessionId, throwIfSessionExpired, buildUrl } from "./server/utils";
 import { SessionExpiredError } from "./server/errors";
 import { ParseModeFlavor, hydrateReply } from "@grammyjs/parse-mode";
 
@@ -14,7 +14,6 @@ export const bot = new Bot<ParseModeFlavor<Context>>(process.env.BOT_API_KEY!);
 bot.use(hydrateReply);
 
 // const startingInlineKeyboard = new InlineKeyboard().game(GAME_START_BUTTON_TEXT);
-const startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", `${process.env.BIT_FARM_URL}`);
 
 bot.command(
 	"start",
@@ -22,6 +21,15 @@ bot.command(
 );
 
 bot.command("game", async (ctx) => {
+	const chat = {
+		chat_type: ctx.chat.type,
+		chat_instance: ctx.chat.id.toString(),
+	};
+
+	const startingInlineKeyboard = new InlineKeyboard().webApp(
+		"Open Game",
+		buildUrl(`${process.env.BIT_FARM_URL}`, chat),
+	);
 	// await ctx.replyWithGame(process.env.BIT_FARM_SHORTNAME as string, {
 	// 	reply_markup: startingInlineKeyboard,
 	// });

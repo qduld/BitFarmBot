@@ -233,3 +233,25 @@ export function throwIfSessionExpired(sessionId: string) {
 		throw new SessionExpiredError(sessionId);
 	}
 }
+
+/**
+ * 将对象参数绑定到指定的 URL 上，生成带查询参数的 URL。
+ * @param baseUrl 基础 URL（不包含查询参数）
+ * @param params 需要绑定到 URL 的对象参数
+ * @returns 带查询参数的完整 URL
+ */
+export function buildUrl(
+	baseUrl: string,
+	params: Record<string, string | number | boolean | undefined | null>,
+): string {
+	const url = new URL(baseUrl);
+
+	// 遍历对象并添加非 undefined 和非 null 的参数到 URL 上
+	Object.entries(params).forEach(([key, value]) => {
+		if (value !== undefined && value !== null) {
+			url.searchParams.append(key, String(value));
+		}
+	});
+
+	return url.toString();
+}
