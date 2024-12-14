@@ -14,6 +14,7 @@ export const bot = new Bot<ParseModeFlavor<Context>>(process.env.BOT_API_KEY!);
 bot.use(hydrateReply);
 
 // const startingInlineKeyboard = new InlineKeyboard().game(GAME_START_BUTTON_TEXT);
+let startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", `${process.env.BIT_FARM_URL}`);
 
 bot.command(
 	"start",
@@ -29,7 +30,7 @@ bot.command("game", async (ctx) => {
 	};
 
 	let finalUrl = buildUrl(`${process.env.BIT_FARM_URL}`, chat);
-	const startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", finalUrl);
+	startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", finalUrl);
 	// await ctx.replyWithGame(process.env.BIT_FARM_SHORTNAME as string, {
 	// 	reply_markup: startingInlineKeyboard,
 	// });
