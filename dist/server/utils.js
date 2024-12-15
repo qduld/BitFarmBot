@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.throwIfSessionExpired = exports.sortDescendingScore = exports.getSessionId = exports.endSession = exports.createSession = exports.handlePlayerStart = exports.handleJoinSession = exports.decrementGameScore = exports.incrementGameScore = exports.getGameScoreObj = exports.setGameScore = void 0;
+exports.buildUrl = exports.throwIfSessionExpired = exports.sortDescendingScore = exports.getSessionId = exports.endSession = exports.createSession = exports.handlePlayerStart = exports.handleJoinSession = exports.decrementGameScore = exports.incrementGameScore = exports.getGameScoreObj = exports.setGameScore = void 0;
 const crypto_1 = require("crypto");
 const constants_1 = require("../constants");
 const server_1 = require("./server");
@@ -206,3 +206,20 @@ function throwIfSessionExpired(sessionId) {
     }
 }
 exports.throwIfSessionExpired = throwIfSessionExpired;
+/**
+ * 将对象参数绑定到指定的 URL 上，生成带查询参数的 URL。
+ * @param baseUrl 基础 URL（不包含查询参数）
+ * @param params 需要绑定到 URL 的对象参数
+ * @returns 带查询参数的完整 URL
+ */
+function buildUrl(baseUrl, params) {
+    const url = new URL(baseUrl);
+    // 遍历对象并添加非 undefined 和非 null 的参数到 URL 上
+    Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+            url.searchParams.append(key, String(value));
+        }
+    });
+    return url.toString();
+}
+exports.buildUrl = buildUrl;

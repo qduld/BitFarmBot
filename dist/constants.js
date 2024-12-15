@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WELCOME_MESSAGE = exports.NUM_DAYS_SESSION_EXPIRED = exports.MAX_SESSIONS = exports.GAME_START_BUTTON_TEXT = exports.TURN_MAX = exports.PLAYER_MAX = exports.GAME_URL = exports.GAME_LIST = exports.Game = void 0;
-const parse_mode_1 = require("@grammyjs/parse-mode");
 var Game;
 (function (Game) {
     Game[Game["BIT_FARM"] = 0] = "BIT_FARM";
@@ -24,8 +23,16 @@ exports.TURN_MAX = {
 exports.GAME_START_BUTTON_TEXT = "Play now!";
 exports.MAX_SESSIONS = 10000;
 exports.NUM_DAYS_SESSION_EXPIRED = 3;
-exports.WELCOME_MESSAGE = (0, parse_mode_1.fmt) `Welcome!
+exports.WELCOME_MESSAGE = `Welcome!
 
-This bot is best used in ${(0, parse_mode_1.link)("Inline Mode", "https://telegram.org/blog/inline-bots")}. Just go to your chat then type the name of the bot with a space at the end: ${(0, parse_mode_1.code)("@gamejaybot ")} and a list of games should show up! You can search through the games by continuing to type your search query. Then, tap on the one you want to start and it will send a new game to the chat you're in.
+This bot is a game bot about TON farm named BitFarm.
 
-Currently, Word Hunt Online is the only game available for GameJay, but more are planned to be added!`;
+Sow Now,Reap Tokens`;
+// export const WELCOME_MESSAGE = fmt`Welcome!
+// This bot is best used in ${link(
+// 	"Inline Mode",
+// 	"https://telegram.org/blog/inline-bots",
+// )}. Just go to your chat then type the name of the bot with a space at the end: ${code(
+// 	"@gamejaybot ",
+// )} and a list of games should show up! You can search through the games by continuing to type your search query. Then, tap on the one you want to start and it will send a new game to the chat you're in.
+// Currently, Word Hunt Online is the only game available for GameJay, but more are planned to be added!`;

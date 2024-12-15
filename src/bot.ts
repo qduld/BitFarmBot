@@ -130,16 +130,16 @@ async function orgGameUrl(ctx: any) {
 	return urlWithPhoto;
 }
 
-// 设置自定义菜单按钮
-bot.api.setChatMenuButton({
-	menu_button: {
-		type: "web_app",
-		text: "💰✋",
-		web_app: {
-			url: finalUrl,
-		},
-	},
-});
+// // 设置自定义菜单按钮
+// bot.api.setChatMenuButton({
+// 	menu_button: {
+// 		type: "web_app",
+// 		text: "💰✋",
+// 		web_app: {
+// 			url: finalUrl,
+// 		},
+// 	},
+// });
 
 // Use the default callback handler to just display its text data.
 // So far, it just displays the score of the player whose button was clicked.
