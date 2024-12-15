@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendMsg = exports.bot = void 0;
 const grammy_1 = require("grammy");
@@ -6,6 +9,8 @@ const constants_1 = require("./constants");
 const utils_1 = require("./server/utils");
 const errors_1 = require("./server/errors");
 const parse_mode_1 = require("@grammyjs/parse-mode");
+const path_1 = __importDefault(require("path"));
+const descriptionPicture = "http://3.24.242.84/bot_description_picture.png";
 if (!process.env.BOT_API_KEY) {
     console.error("environment misconfigured");
 }
@@ -19,12 +24,22 @@ let startingInlineKeyboard = new grammy_1.InlineKeyboard().webApp("Open Game", `
 // 	"start",
 // 	async (ctx) => await ctx.replyFmt(WELCOME_MESSAGE, { link_preview_options: { is_disabled: true } }),
 // );
+const fs = require("fs");
+const filePath = path_1.default.join(__dirname, "../src/assets/download.png"); // 确保文件路径正确
+// const fileStream = fs.createReadStream(filePath);
+const inputFile = new grammy_1.InputFile(fs.createReadStream(filePath));
 // 监听 /start 命令
 exports.bot.command("start", async (ctx) => {
-    await ctx.replyWithPhoto(`${process.env.DESCRIPTION_PICTURE}`, // 替换为你的图片 URL
-    {
+    // new InlineKeyboard().text("Play💰", "play").row();
+    const chat = {
+        chat_type: ctx.chat.type,
+        chat_instance: ctx.chat.id.toString(),
+    };
+    let finalUrl = (0, utils_1.buildUrl)(`${process.env.BIT_FARM_URL}`, chat);
+    startingInlineKeyboard = new grammy_1.InlineKeyboard().webApp("Open Game", finalUrl);
+    await ctx.replyWithPhoto(inputFile, {
         caption: constants_1.WELCOME_MESSAGE,
-        reply_markup: new grammy_1.InlineKeyboard().text("Play💰", "play").row(),
+        reply_markup: startingInlineKeyboard,
     });
 });
 let finalUrl = "";
@@ -110,16 +125,16 @@ async function orgGameUrl(ctx) {
     }
     return urlWithPhoto;
 }
-// 设置自定义菜单按钮
-exports.bot.api.setChatMenuButton({
-    menu_button: {
-        type: "web_app",
-        text: "💰✋",
-        web_app: {
-            url: finalUrl,
-        },
-    },
-});
+// // 设置自定义菜单按钮
+// bot.api.setChatMenuButton({
+// 	menu_button: {
+// 		type: "web_app",
+// 		text: "💰✋",
+// 		web_app: {
+// 			url: finalUrl,
+// 		},
+// 	},
+// });
 // Use the default callback handler to just display its text data.
 // So far, it just displays the score of the player whose button was clicked.
 exports.bot.on("callback_query:data", (ctx) => {

@@ -1,8 +1,9 @@
-import { Bot, Context, GrammyError, InlineKeyboard } from "grammy";
+import { Bot, Context, GrammyError, InlineKeyboard, InputFile } from "grammy";
 import { GAME_LIST, GAME_START_BUTTON_TEXT, WELCOME_MESSAGE } from "./constants";
 import { getSessionId, throwIfSessionExpired, buildUrl } from "./server/utils";
 import { SessionExpiredError } from "./server/errors";
 import { ParseModeFlavor, hydrateReply } from "@grammyjs/parse-mode";
+import path from "path";
 
 if (!process.env.BOT_API_KEY) {
 	console.error("environment misconfigured");
@@ -21,15 +22,25 @@ let startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", `${process
 // 	async (ctx) => await ctx.replyFmt(WELCOME_MESSAGE, { link_preview_options: { is_disabled: true } }),
 // );
 
+const fs = require("fs");
+const filePath = path.join(__dirname, "../src/assets/download.png"); // 确保文件路径正确
+// const fileStream = fs.createReadStream(filePath);
+const inputFile = new InputFile(fs.createReadStream(filePath));
+
 // 监听 /start 命令
 bot.command("start", async (ctx) => {
-	await ctx.replyWithPhoto(
-		`${process.env.DESCRIPTION_PICTURE}`, // 替换为你的图片 URL
-		{
-			caption: WELCOME_MESSAGE,
-			reply_markup: new InlineKeyboard().text("Play💰", "play").row(),
-		},
-	);
+	// new InlineKeyboard().text("Play💰", "play").row();
+	const chat = {
+		chat_type: ctx.chat.type,
+		chat_instance: ctx.chat.id.toString(),
+	};
+
+	let finalUrl = buildUrl(`${process.env.BIT_FARM_URL}`, chat);
+	startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", finalUrl);
+	await ctx.replyWithPhoto(inputFile, {
+		caption: WELCOME_MESSAGE,
+		reply_markup: startingInlineKeyboard,
+	});
 });
 
 let finalUrl = "";
