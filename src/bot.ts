@@ -16,10 +16,10 @@ bot.use(hydrateReply);
 // const startingInlineKeyboard = new InlineKeyboard().game(GAME_START_BUTTON_TEXT);
 let startingInlineKeyboard = new InlineKeyboard().webApp("Open Game", `${process.env.BIT_FARM_URL}`);
 
-bot.command(
-	"start",
-	async (ctx) => await ctx.replyFmt(WELCOME_MESSAGE, { link_preview_options: { is_disabled: true } }),
-);
+// bot.command(
+// 	"start",
+// 	async (ctx) => await ctx.replyFmt(WELCOME_MESSAGE, { link_preview_options: { is_disabled: true } }),
+// );
 
 // 监听 /start 命令
 bot.command("start", async (ctx) => {
