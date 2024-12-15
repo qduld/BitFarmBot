@@ -21,6 +21,17 @@ bot.command(
 	async (ctx) => await ctx.replyFmt(WELCOME_MESSAGE, { link_preview_options: { is_disabled: true } }),
 );
 
+// 监听 /start 命令
+bot.command("start", async (ctx) => {
+	await ctx.replyWithPhoto(
+		`${process.env.DESCRIPTION_PICTURE}`, // 替换为你的图片 URL
+		{
+			caption: WELCOME_MESSAGE,
+			reply_markup: new InlineKeyboard().text("Play💰", "play").row(),
+		},
+	);
+});
+
 let finalUrl = "";
 
 bot.command("game", async (ctx) => {
@@ -118,6 +129,17 @@ async function orgGameUrl(ctx: any) {
 
 	return urlWithPhoto;
 }
+
+// 设置自定义菜单按钮
+bot.api.setChatMenuButton({
+	menu_button: {
+		type: "web_app",
+		text: "💰✋",
+		web_app: {
+			url: finalUrl,
+		},
+	},
+});
 
 // Use the default callback handler to just display its text data.
 // So far, it just displays the score of the player whose button was clicked.
